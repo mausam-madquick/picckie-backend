@@ -6,9 +6,11 @@ import FormData from "form-data";
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
+const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || "http://localhost:8000";
+
 router.get("/health", async (req, res) => {
 	try {
-		const response = await axios.get("http://localhost:8000/health");
+		const response = await axios.get(`${PYTHON_SERVICE_URL}/health`);
 		res.json(response.data);
 	} catch (err) {
 		res.status(502).json({ error: "Background removal python service is unreachable" });
@@ -61,7 +63,7 @@ router.post(["/remove-bg", "/remove-background", "/remove-bg-variants", "/remove
 			form.append("multi_border", "true");
 		}
 
-		const response = await axios.post("http://localhost:8000/remove-bg", form, {
+		const response = await axios.post(`${PYTHON_SERVICE_URL}/remove-bg`, form, {
 			headers: form.getHeaders(),
 			responseType: "arraybuffer",
 		});

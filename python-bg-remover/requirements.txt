@@ -3,5 +3,5 @@ uvicorn
 rembg
 pillow
 python-multipart
-opencv-python
+opencv-python-headless
 numpy
