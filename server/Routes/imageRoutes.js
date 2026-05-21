@@ -17,6 +17,19 @@ router.get("/health", async (req, res) => {
 	}
 });
 
+router.get("/debug-log", async (req, res) => {
+	try {
+		if (fs.existsSync("/tmp/python.log")) {
+			const logContent = await fs.promises.readFile("/tmp/python.log", "utf8");
+			res.header("Content-Type", "text/plain").send(logContent);
+		} else {
+			res.send("Python log file not found yet. It may still be starting up.");
+		}
+	} catch (err) {
+		res.status(500).send("Error reading log file: " + err.message);
+	}
+});
+
 router.post(["/remove-bg", "/remove-background", "/remove-bg-variants", "/remove-background-variants"], upload.single("file"), async (req, res) => {
 	try {
 		if (!req.file) {
