@@ -1,7 +1,9 @@
 fastapi
 uvicorn
+onnxruntime==1.16.3
 rembg[cpu]
 pillow
 python-multipart
 opencv-python-headless
 numpy
+
