@@ -3,6 +3,9 @@ FROM nikolaik/python-nodejs:python3.10-nodejs20-slim
 
 WORKDIR /app
 
+# Set a persistent, static directory for the rembg u2net model cache
+ENV U2NET_HOME=/app/.u2net
+
 # Install basic system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
