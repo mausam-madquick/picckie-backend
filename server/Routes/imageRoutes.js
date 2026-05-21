@@ -6,7 +6,7 @@ import FormData from "form-data";
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
-const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || "http://localhost:8000";
+const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || "http://127.0.0.1:8000";
 
 router.get("/health", async (req, res) => {
 	try {
