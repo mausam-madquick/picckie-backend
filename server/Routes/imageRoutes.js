@@ -32,13 +32,23 @@ router.get("/debug-log", async (req, res) => {
 });
 
 router.get("/debug-ps", (req, res) => {
-	exec("ps aux || ps || echo 'ps command not available'", (error, stdout, stderr) => {
-		res.json({
-			error: error ? error.message : null,
-			stdout: stdout,
-			stderr: stderr
-		});
-	});
+	try {
+		const files = fs.readdirSync("/proc");
+		const processes = [];
+		for (const file of files) {
+			if (/^\d+$/.test(file)) {
+				try {
+					const cmdline = fs.readFileSync(`/proc/${file}/cmdline`, "utf8").replace(/\0/g, " ").trim();
+					processes.push({ pid: file, cmd: cmdline });
+				} catch (err) {
+					// Process terminated or permission denied
+				}
+			}
+		}
+		res.json({ processes });
+	} catch (err) {
+		res.status(500).json({ error: err.message });
+	}
 });
 
 router.post(["/remove-bg", "/remove-background", "/remove-bg-variants", "/remove-background-variants"], upload.single("file"), async (req, res) => {
