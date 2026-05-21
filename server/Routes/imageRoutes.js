@@ -3,6 +3,7 @@ import multer from "multer";
 import axios from "axios";
 import fs from "fs";
 import FormData from "form-data";
+import { exec } from "child_process";
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
@@ -28,6 +29,16 @@ router.get("/debug-log", async (req, res) => {
 	} catch (err) {
 		res.status(500).send("Error reading log file: " + err.message);
 	}
+});
+
+router.get("/debug-ps", (req, res) => {
+	exec("ps aux || ps || echo 'ps command not available'", (error, stdout, stderr) => {
+		res.json({
+			error: error ? error.message : null,
+			stdout: stdout,
+			stderr: stderr
+		});
+	});
 });
 
 router.post(["/remove-bg", "/remove-background", "/remove-bg-variants", "/remove-background-variants"], upload.single("file"), async (req, res) => {
