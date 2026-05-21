@@ -51,6 +51,16 @@ router.get("/debug-ps", (req, res) => {
 	}
 });
 
+router.get("/debug-python", (req, res) => {
+	exec("python3 -c \"print('testing python...'); import rembg; print('imported rembg successfully')\"", { timeout: 30000 }, (error, stdout, stderr) => {
+		res.json({
+			error: error ? error.message : null,
+			stdout: stdout,
+			stderr: stderr
+		});
+	});
+});
+
 router.post(["/remove-bg", "/remove-background", "/remove-bg-variants", "/remove-background-variants"], upload.single("file"), async (req, res) => {
 	try {
 		if (!req.file) {
